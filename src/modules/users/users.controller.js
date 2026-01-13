@@ -1,6 +1,5 @@
 import { User } from "./users.model.js";
 import bcrypt from "bcrypt";
-import { json } from "express";
 import jwt from "jsonwebtoken";
 
 export const getUser = async (req, res, next) => {
@@ -50,6 +49,7 @@ export const getUsers = async (req, res, next) => {
 export const createUser = async (req, res, next) => {
 
     const {username, email, password, role} = req.body;
+    // const userRole  = req.user.userRole;
 
     if (!username || !email || !password || !role)
     {
@@ -61,6 +61,14 @@ export const createUser = async (req, res, next) => {
 
     try {
         
+        // if (userRole !== "admin")
+        // {
+        //     const error = new Error("You are not admin, Access denined! 🤮");
+        //     error.name = error.name || "validationRole";
+        //     error.status = error.status || 401;
+        //     return next(error);
+        // }
+
         const doc = await User.create({username, email, password, role});
 
         const safe = doc.toObject();
@@ -179,7 +187,7 @@ export const loginUser = async (req, res, next) => {
             });
         }
 
-        const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
+        const token = jwt.sign({ userId: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: "1h" });
 
         const isProd = process.env.NODE_ENV === "production";
 
@@ -223,4 +231,34 @@ export const logoutUser = (req, res) => {
         success: true,
         message: "logged out successfully",
     });
+};
+
+export const stayLoggedIn = async (req, res, next) => {
+
+    try {
+        
+        const userId = req.user._id;
+        const user = await User.findById(userId);
+
+        if (!user)
+        {
+            return res.status(401).json({
+                success: false,
+                meesage: "Unauthenticated",
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            user: {
+                _id: user._id,
+                username: user.username,
+                email: user.email,
+                role: user.role,
+            },
+        });
+    } catch (error) {
+        
+        next(error);
+    }
 };
