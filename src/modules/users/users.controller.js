@@ -61,14 +61,6 @@ export const createUser = async (req, res, next) => {
 
     try {
         
-        // if (userRole !== "admin")
-        // {
-        //     const error = new Error("You are not admin, Access denined! 🤮");
-        //     error.name = error.name || "validationRole";
-        //     error.status = error.status || 401;
-        //     return next(error);
-        // }
-
         const doc = await User.create({username, email, password, role});
 
         const safe = doc.toObject();
@@ -78,7 +70,6 @@ export const createUser = async (req, res, next) => {
             success: true,
             data: safe,
         });
-
     } catch (error) {
         
         if (error.code === 11000)
