@@ -49,7 +49,6 @@ export const getUsers = async (req, res, next) => {
 export const createUser = async (req, res, next) => {
 
     const {username, email, password, role} = req.body;
-    // const userRole  = req.user.userRole;
 
     if (!username || !email || !password || !role)
     {

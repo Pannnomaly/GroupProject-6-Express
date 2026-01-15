@@ -66,16 +66,6 @@ export const createContact = async (req, res, next) => {
         });
     } catch (error) {
         
-        if (error.code === 11000)
-        {
-            error.status = 409;
-            error.name = "DuplicateKeyError";
-            error.message = "Email already in use";
-        }
-
-        error.status = 500;
-        error.name = error.name || "DatabaseError";
-        error.message = error.message || "Failed to create a user";
         return next(error);
     }
 };
