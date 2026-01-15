@@ -2,24 +2,23 @@ import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 
 const userSchema = new mongoose.Schema(
-    {
-        firstname: {type: String, required: true, trim: true},
-        lastname: {type: String, required: true, trim: true},
-        imagelink: {type: String, required: true, trim: true},
-        detail: {type: String, required: true, trim: true},
-        email: {type: String, required: true, trim: true, unique: true, lowercase: true},
-        password: {type: String, required: true, trim: true, minlength: 8, select: false},
-        role: {type: String, enum: ["user", "admin"], default: "user"},
-    },
-    {
-        timestamps: true,
-    },
+  {
+    firstname: { type: String, required: true, trim: true },
+    lastname: { type: String, required: true, trim: true },
+    imagelink: { type: String, trim: true },
+    detail: { type: String, trim: true },
+    email: { type: String, required: true, trim: true, unique: true, lowercase: true },
+    password: { type: String, required: true, trim: true, minlength: 8, select: false },
+    role: { type: String, enum: ["user", "admin"], default: "user" },
+  },
+  {
+    timestamps: true,
+  }
 );
 
-userSchema.pre("save", async function ()
-{
-    if (!this.isModified("password")) return;
-    this.password = await bcrypt.hash(this.password, 10);
+userSchema.pre("save", async function () {
+  if (!this.isModified("password")) return;
+  this.password = await bcrypt.hash(this.password, 10);
 });
 
 export const User = mongoose.model("User", userSchema);
