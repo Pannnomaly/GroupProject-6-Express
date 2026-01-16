@@ -14,20 +14,20 @@ Content-Type: application/json
 GET http://localhost:3000/api/v1/rooms/
 
 ### GET request to read a room
-GET http://localhost:3000/api/v1/rooms/1099
+GET http://localhost:3000/api/v1/rooms/16
 
 ### PATCH update a user
-PATCH http://localhost:3000/api/v1/rooms/101
+PATCH http://localhost:3000/api/v1/rooms/16
 Content-Type: application/json
 
 {
-    "roomnumber": 120,
+    "roomnumber": 17,
     "type": "Suite",
     "floor": 3,
-    "price": 500,
+    "price": 800,
     "imagelink": "#"
 }
 
 ### DELETE request to delete a room
-DELETE http://localhost:3000/api/v1/rooms/1099
+DELETE http://localhost:3000/api/v1/rooms/17
 
