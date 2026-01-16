@@ -10,15 +10,7 @@ export const createBooking = async (req, res, next) => {
       pricing
     } = req.body;
 
-    const booking = new Booking({
-      userId,
-      roomId,
-      checkInDate,
-      checkOutDate,
-      pricing
-    });
-
-    const savedBooking = await booking.save();
+    const savedBooking = await Booking.create({userId, roomId, checkInDate, checkOutDate, pricing});
 
     res.status(201).json({
       message: "Booking created successfully",
