@@ -14,7 +14,6 @@ export const authUser = (req, res, next) => {
     }
 
     try {
-        
         const decededToken = jwt.verify(token, process.env.JWT_SECRET);
 
         req.user = {
@@ -24,7 +23,6 @@ export const authUser = (req, res, next) => {
 
         next();
     } catch (error) {
-        
         next(error);
     }
 };

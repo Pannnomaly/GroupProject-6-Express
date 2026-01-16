@@ -1,0 +1,17 @@
+### POST request to create a booking
+POST http://localhost:3000/api/v1/bookings
+Content-Type: application/json
+
+{
+  "userId": "696a511aea4207025673111d",
+  "roomId": "69690d898b395eea3ff12c86",
+  "checkInDate": "2026-03-01",
+  "checkOutDate": "2026-03-05",
+  "pricing": {
+    "roomRate": 1500,
+    "totalAmount": 6000
+  }
+}
+
+### GET request to read all Bookings
+GET http://localhost:3000/api/v1/bookings
