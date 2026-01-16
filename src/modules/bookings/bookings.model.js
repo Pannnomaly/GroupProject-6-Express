@@ -20,7 +20,7 @@ const bookingSchema = new mongoose.Schema(
 }, { timestamps: true });
 
 // Logic สร้างเลขการจองและคำนวณคืนอัตโนมัติ
-bookingSchema.pre("validate", function () {
+bookingSchema.pre("validate", async function () {
   // guard ก่อน (กันพัง)
   if (!this.checkInDate || !this.checkOutDate) return;
 
