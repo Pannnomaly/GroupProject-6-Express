@@ -39,9 +39,9 @@ export const getUsers = async (req, res, next) => {
 };
 
 export const createUser = async (req, res, next) => {
-  const { firstname, lastname, email, password, role } = req.body;
+  const { firstname, lastname, email, password } = req.body;
 
-  if (!firstname || !lastname || !email || !password || !role) {
+  if (!firstname || !lastname || !email || !password) {
     const error = new Error("firstrname, lastname, email, password, and role are required");
     error.name = "ValidationError";
     error.status = 400;
@@ -49,7 +49,7 @@ export const createUser = async (req, res, next) => {
   }
 
   try {
-    const doc = await User.create({ firstname, lastname, email, password, role });
+    const doc = await User.create({ firstname, lastname, email, password });
 
     const safe = doc.toObject();
     delete safe.password;
