@@ -15,3 +15,22 @@ Content-Type: application/json
 
 ### GET request to read all Bookings
 GET http://localhost:3000/api/v1/bookings
+
+### GET request to read a specific booking
+GET http://localhost:3000/api/v1/bookings/BK-154487
+
+### DELETE request to delete a user
+DELETE http://localhost:3000/api/v1/bookings/BK-112965
+
+### PATCH update a user
+PATCH http://localhost:3000/api/v1/bookings/BK-833643
+Content-Type: application/json
+
+{
+  "checkInDate": "2026-12-01",
+  "checkOutDate": "2027-01-01",
+  "pricing": {
+    "roomRate": 15000,
+    "totalAmount": 60000
+  }
+}
