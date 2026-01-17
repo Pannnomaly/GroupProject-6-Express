@@ -6,10 +6,11 @@ POST http://localhost:3000/api/v1/users
 Content-Type: application/json
 
 {
-    "username": "Alpha6",
-    "email": "alpha6@example.com",
-    "password": "alpha123",
-    "role": "user"
+    "firstname": "Admin",
+    "lastname": "Pann",
+    "email": "pann@hotmail.com",
+    "password": "pann1234",
+    "role": "admin"
 }
 
 ### PATCH update a user
@@ -22,15 +23,15 @@ Content-Type: application/json
 }
 
 ### DELETE request to delete a user
-DELETE http://localhost:3000/api/v1/users/6965c57837e9ff3eabba8a2b
+DELETE http://localhost:3000/api/v1/users/696bb3652222e5a7708f270a
 
 ### POST Login a user
 POST http://localhost:3000/api/v1/users/auth/cookie/login
 Content-Type: application/json
 
 {
-    "email": "alpha2@example.com",
-    "password": "alpha123"
+    "email": "pann@hotmail.com",
+    "password": "pann1234"
 }
 
 ### POST Logout a user
