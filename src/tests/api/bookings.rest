@@ -7,10 +7,6 @@ Content-Type: application/json
   "roomId": "69690d898b395eea3ff12c86",
   "checkInDate": "2026-06-01",
   "checkOutDate": "2026-06-05",
-  "pricing": {
-    "roomRate": 1500,
-    "totalAmount": 6000
-  }
 }
 
 ### GET request to read all Bookings
@@ -29,8 +25,4 @@ Content-Type: application/json
 {
   "checkInDate": "2026-12-01",
   "checkOutDate": "2027-01-01",
-  "pricing": {
-    "roomRate": 15000,
-    "totalAmount": 60000
-  }
 }
