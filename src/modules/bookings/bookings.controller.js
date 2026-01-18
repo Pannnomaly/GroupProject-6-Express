@@ -106,6 +106,8 @@ export const updateBooking = async (req, res, next) => {
 
       // คำนวณจำนวนคืนใหม่ใส่เข้าไปใน body ก่อนอัปเดต
       body.nights = Math.ceil((checkOut - checkIn) / (1000 * 60 * 60 * 24));
+      // คำนวณค่าห้อง
+      body.pricing.totalAmount = body.pricing.roomRate * body.nights;
     };
 
     const updated = await Booking.findOneAndUpdate(
@@ -119,6 +121,14 @@ export const updateBooking = async (req, res, next) => {
       const error = new Error("A Booking not found");
       return next(error);
     }
+
+    // ... หลังจาก updated สำเร็จ ให้เปลี่ยนสถานะ Room
+    if (updated.status === "checked_out" || updated.status === "cancelled") {
+      await Room.findByIdAndUpdate(updated.roomId, {
+        status: "Available",
+        currentGuest: null
+      });
+    };
 
     return res.status(200).json({
       success: true,
