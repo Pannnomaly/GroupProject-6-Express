@@ -1,9 +1,9 @@
 import { Room } from "./rooms.model.js";
 
 export const createRoom = async (req, res, next) => {
-  const {roomnumber, type, floor, price, imagelink} = req.body;
+  const {roomNumber, type, floor, roomRate, imagelink} = req.body;
 
-  if (!roomnumber || !type || !floor || !price || !imagelink)
+  if (!roomNumber || !type || !floor || !roomRate || !imagelink)
     {
       const error = new Error("Your inputs are not met with the requirements");
       error.status = 400;
@@ -12,7 +12,7 @@ export const createRoom = async (req, res, next) => {
 
   try {
 
-    const doc = await Room.create({roomnumber, type, floor, price, imagelink});
+    const doc = await Room.create({roomNumber, type, floor, roomRate, imagelink});
 
     return res.status(201).json({
       success: true,
@@ -35,7 +35,7 @@ export const createRoom = async (req, res, next) => {
 
 export const getRooms = async (req, res, next) => {
   try {
-    const rooms = await Room.find().sort({ roomnumber: 1 });
+    const rooms = await Room.find().sort({ roomNumber: 1 });
 
     return res.status(200).json({
       success: true,
@@ -50,7 +50,7 @@ export const getRoom = async (req, res, next) => {
   const { roomNumber } = req.params;
 
     try {
-      const doc = await Room.findOne({ roomnumber: roomNumber });
+      const doc = await Room.findOne({ roomNumber: roomNumber });
 
       if (!doc)
       {
@@ -74,7 +74,7 @@ export const deleteRoom = async (req, res, next) => {
     const { roomNumber } = req.params;
 
     try {
-      const deleted = await Room.findOneAndDelete({ roomnumber: roomNumber });
+      const deleted = await Room.findOneAndDelete({ roomNumber: roomNumber });
 
       if (!deleted)
       {
@@ -98,7 +98,7 @@ export const updateRoom = async (req, res, next) => {
 
     try {
       const updated = await Room.findOneAndUpdate(
-            { roomnumber: roomNumber },
+            { roomNumber: roomNumber },
             body,
             { new: true, runValidators: true } // ส่งข้อมูลใหม่ พร้อม validate update data กับ schema ของ room
         );
