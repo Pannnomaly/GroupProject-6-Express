@@ -14,7 +14,11 @@ const roomSchema = new mongoose.Schema(
         roomRate: { type: Number, required: true },
         imagelink: {type: String, require: true, trim: true},
         currentGuest: { type: mongoose.Schema.Types.ObjectId, ref: 'User', default: null },
-        notes: { type: String, trim: true }
+        notes: { type: String, trim: true },
+        size: {type: String, trim: true},
+        additional1: {type: String, trim: true},
+        additional2: {type: String, trim: true},
+        additional3: {type: String, trim: true},
     },
     { timestamps: true }
 );
