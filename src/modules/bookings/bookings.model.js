@@ -19,24 +19,57 @@ const bookingSchema = new mongoose.Schema(
     }
 }, { timestamps: true });
 
-// Logic สร้างเลขการจองและคำนวณคืนอัตโนมัติ
+// check ก่อน save
 bookingSchema.pre("validate", async function () {
-  // guard ก่อน (กันพัง)
-  if (!this.checkInDate || !this.checkOutDate) return;
+  if (!this.checkInDate || !this.checkOutDate || !this.roomId) return next();
 
-  const checkIn = new Date(this.checkInDate);
-  const checkOut = new Date(this.checkOutDate);
+  try {
+    // ดึงข้อมูลห้องพักเพื่อเอา roomRate ล่าสุดจาก Database
+    const Room = mongoose.model("Room");
+    const room = await Room.findById(this.roomId);
+    if (!room) {
+      throw new Error("Room not found");
+    }
 
-  // สร้าง confirmation number เฉพาะตอน create
-  if (this.isNew && !this.confirmationNumber) {
-    const timestamp = Date.now().toString().slice(-6);
-    this.confirmationNumber = `BK-${timestamp}`;
+    // กำหนด roomRate ให้ตรงกับราคาของห้องนั้นๆ (ป้องกันการส่งราคาปลอมมาจากหน้าบ้าน)
+    this.pricing.roomRate = room.roomRate;
+
+    const checkIn = new Date(this.checkInDate);
+    const checkOut = new Date(this.checkOutDate);
+    if (checkOut <= checkIn) {
+      throw new Error("Check-out date must be at least one day after check-in date.");
+    }
+
+    // คำนวณจำนวนคืนและราครวม
+    this.nights = Math.ceil((checkOut - checkIn) / (1000 * 60 * 60 * 24));
+    this.pricing.totalAmount = this.pricing.roomRate * this.nights;
+
+    // Logic สร้างเลขการจอง
+    if (this.isNew && !this.confirmationNumber) {
+      const timestamp = Date.now().toString().slice(-6);
+      this.confirmationNumber = `BK-${timestamp}`;
+    }
+
+  } catch (error) {
+    throw error;
   }
+});
 
-  // คำนวณจำนวนคืน
-  this.nights = Math.ceil(
-    (checkOut - checkIn) / (1000 * 60 * 60 * 24)
-  );
+// หลังจากบันทึกรายการจองสำเร็จ
+bookingSchema.post("save", async function (doc) {
+  try {
+    // ดึง Model Room มาใช้งาน
+    const Room = mongoose.model("Room");
+
+    // เมื่อมีการจองสำเร็จ (Status เป็น pending หรือ confirmed)
+    // ให้เปลี่ยนสถานะห้องเป็น 'Reserved' และใส่ ID ของ User ใน currentGuest
+    await Room.findByIdAndUpdate(doc.roomId, {
+      status: "Reserved",
+      currentGuest: doc.userId
+    });
+  } catch (error) {
+    console.error("Failed to update room status:", error);
+  }
 });
 
 export const Booking = mongoose.model("Booking", bookingSchema);
