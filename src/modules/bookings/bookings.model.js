@@ -30,7 +30,7 @@ const bookingSchema = new mongoose.Schema(
 
 // Pre-Validate: จัดการเรื่องวันที่ ราคา และเลขใบจอง
 bookingSchema.pre("validate", async function () {
-  if (!this.checkInDate || !this.checkOutDate || !this.roomId) return next();
+  if (!this.checkInDate || !this.checkOutDate || !this.roomId) return;
 
   try {
     // ดึงข้อมูลห้องพักเพื่อเอา roomRate ล่าสุดจาก Database
@@ -81,7 +81,7 @@ bookingSchema.post("save", async function (doc) {
       currentGuest: matchStatus === "Available" ? null : doc.userId
     });
 
-    console.log(`Updated Room ${doc.roomId} status to: ${newRoomStatus}`);
+    console.log(`Updated Room ${doc.roomId} status to: ${matchStatus}`);
   } catch (err) {
     console.error("Error in bookingSchema.post('save'):", err);
   }
