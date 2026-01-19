@@ -17,14 +17,16 @@ GET http://localhost:3000/api/v1/rooms/
 GET http://localhost:3000/api/v1/rooms/101
 
 ### PATCH update a user
-PATCH http://localhost:3000/api/v1/rooms/16
+PATCH http://localhost:3000/api/v1/rooms/101
 Content-Type: application/json
 
 {
-    "roomNumber": 17,
-    "type": "Suite",
-    "floor": 3,
-    "roomRate": 800,
+    "roomNumber": 101,
+    "type": "Single",
+    "floor": 1,
+    "roomRate": 1200,
+    "status": "Available",
+    "currentGuest": null,
     "imagelink": "#"
 }
 

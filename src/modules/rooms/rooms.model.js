@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 const roomSchema = new mongoose.Schema(
     {
         roomNumber: { type: Number, required: true, unique: true },
-        type: { type: String, enum: ['Single', 'Double', 'Suite'], required: true },
+        type: { type: String, enum: ['Single', 'Double', 'Twin'], required: true },
         status: {
             type: String,
             enum: ['Available', 'Occupied', 'Reserved', 'Cleaning', 'Maintenance'],
