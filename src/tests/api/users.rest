@@ -6,10 +6,10 @@ POST http://localhost:3000/api/v1/users
 Content-Type: application/json
 
 {
-    "firstname": "Admin",
-    "lastname": "Pann",
-    "email": "pann@hotmail.com",
-    "password": "pann1234",
+    "firstname": "Songsak",
+    "lastname": "Thawaro",
+    "email": "mag@example.com",
+    "password": "mag12345",
     "role": "admin"
 }
 
@@ -30,8 +30,8 @@ POST http://localhost:3000/api/v1/users/auth/cookie/login
 Content-Type: application/json
 
 {
-    "email": "pann@hotmail.com",
-    "password": "pann1234"
+    "email": "mag@example.com",
+    "password": "mag12345"
 }
 
 ### POST Logout a user

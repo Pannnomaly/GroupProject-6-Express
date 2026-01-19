@@ -3,10 +3,10 @@ POST http://localhost:3000/api/v1/bookings
 Content-Type: application/json
 
 {
-  "userId": "696a511aea4207025673111d",
-  "roomId": "696d2ffb19af9c89e0939b23",
+  "userId": "696d9839b225d1435bea4547",
+  "roomId": "696d309319af9c89e0939b3a",
   "checkInDate": "2026-06-01",
-  "checkOutDate": "2026-12-05"
+  "checkOutDate": "2026-06-05"
 }
 
 ### GET request to read all Bookings
