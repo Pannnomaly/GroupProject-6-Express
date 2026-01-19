@@ -6,7 +6,7 @@ Content-Type: application/json
   "userId": "696a511aea4207025673111d",
   "roomId": "696d2ffb19af9c89e0939b23",
   "checkInDate": "2026-06-01",
-  "checkOutDate": "2026-12-05"
+  "checkOutDate": "2026-06-05"
 }
 
 ### GET request to read all Bookings
@@ -16,13 +16,12 @@ GET http://localhost:3000/api/v1/bookings
 GET http://localhost:3000/api/v1/bookings/BK-154487
 
 ### DELETE request to delete a user
-DELETE http://localhost:3000/api/v1/bookings/BK-112965
+DELETE http://localhost:3000/api/v1/bookings/BK-623170
 
 ### PATCH update a user
-PATCH http://localhost:3000/api/v1/bookings/BK-833643
+PATCH http://localhost:3000/api/v1/bookings/BK-079981
 Content-Type: application/json
 
 {
-  "checkInDate": "2026-12-01",
-  "checkOutDate": "2027-01-01"
+  "status": "confirmed"
 }

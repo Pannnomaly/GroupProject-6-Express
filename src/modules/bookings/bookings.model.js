@@ -1,5 +1,14 @@
 import mongoose from "mongoose";
 
+
+const BOOKING_TO_ROOM_STATUS = {
+  pending: "Reserved",
+  confirmed: "Reserved",
+  checked_in: "Occupied",
+  checked_out: "Available",
+  cancelled: "Available",
+};
+
 const bookingSchema = new mongoose.Schema(
   {
     userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
@@ -19,32 +28,35 @@ const bookingSchema = new mongoose.Schema(
     }
 }, { timestamps: true });
 
-// check ก่อน save
+// Pre-Validate: จัดการเรื่องวันที่ ราคา และเลขใบจอง
 bookingSchema.pre("validate", async function () {
-  if (!this.checkInDate || !this.checkOutDate || !this.roomId) return next();
+  if (!this.checkInDate || !this.checkOutDate || !this.roomId) return;
 
   try {
     // ดึงข้อมูลห้องพักเพื่อเอา roomRate ล่าสุดจาก Database
     const Room = mongoose.model("Room");
     const room = await Room.findById(this.roomId);
-    if (!room) {
-      throw new Error("Room not found");
+    if (!room) throw new Error("Room not found");
+
+    // เช็คว่าห้องว่างไหม (เฉพาะตอนสร้างใหม่)
+    if (this.isNew && (room.status === 'Cleaning' || room.status === 'Maintenance')) {
+      throw new Error(`Room is currently under ${room.status}`);
     }
 
-    // กำหนด roomRate ให้ตรงกับราคาของห้องนั้นๆ (ป้องกันการส่งราคาปลอมมาจากหน้าบ้าน)
+    // ล็อคราคาจากตาราง Room
     this.pricing.roomRate = room.roomRate;
 
     const checkIn = new Date(this.checkInDate);
     const checkOut = new Date(this.checkOutDate);
     if (checkOut <= checkIn) {
       throw new Error("Check-out date must be at least one day after check-in date.");
-    }
+    };
 
-    // คำนวณจำนวนคืนและราครวม
+    // คำนวณ Nights & Total
     this.nights = Math.ceil((checkOut - checkIn) / (1000 * 60 * 60 * 24));
     this.pricing.totalAmount = this.pricing.roomRate * this.nights;
 
-    // Logic สร้างเลขการจอง
+    // เลขใบจอง
     if (this.isNew && !this.confirmationNumber) {
       const timestamp = Date.now().toString().slice(-6);
       this.confirmationNumber = `BK-${timestamp}`;
@@ -55,20 +67,23 @@ bookingSchema.pre("validate", async function () {
   }
 });
 
-// หลังจากบันทึกรายการจองสำเร็จ
+// Post-Save: อัปเดตสถานะห้องให้สัมพันธ์กัน
 bookingSchema.post("save", async function (doc) {
   try {
     // ดึง Model Room มาใช้งาน
     const Room = mongoose.model("Room");
 
-    // เมื่อมีการจองสำเร็จ (Status เป็น pending หรือ confirmed)
-    // ให้เปลี่ยนสถานะห้องเป็น 'Reserved' และใส่ ID ของ User ใน currentGuest
+    const matchStatus = BOOKING_TO_ROOM_STATUS[doc.status] || "Available";
+
     await Room.findByIdAndUpdate(doc.roomId, {
-      status: "Reserved",
-      currentGuest: doc.userId
+      status: matchStatus,
+      // ถ้าสถานะเป็น Available ให้ล้างชื่อแขกออก (null)
+      currentGuest: matchStatus === "Available" ? null : doc.userId
     });
-  } catch (error) {
-    console.error("Failed to update room status:", error);
+
+    console.log(`Updated Room ${doc.roomId} status to: ${matchStatus}`);
+  } catch (err) {
+    console.error("Error in bookingSchema.post('save'):", err);
   }
 });
 
