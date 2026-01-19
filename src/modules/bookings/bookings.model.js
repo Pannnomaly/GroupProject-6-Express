@@ -36,10 +36,13 @@ bookingSchema.pre("validate", async function () {
     // ดึงข้อมูลห้องพักเพื่อเอา roomRate ล่าสุดจาก Database
     const Room = mongoose.model("Room");
     const room = await Room.findById(this.roomId);
-    if (!room) throw new Error("Room not found");
+
+    if (!room) {
+      throw new Error("Room not found")
+    };
 
     // เช็คว่าห้องว่างไหม (เฉพาะตอนสร้างใหม่)
-    if (this.isNew && (room.status === 'Cleaning' || room.status === 'Maintenance')) {
+    if (this.isNew && room.status !== "Available") {
       throw new Error(`Room is currently under ${room.status}`);
     }
 
