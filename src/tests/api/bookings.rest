@@ -4,9 +4,9 @@ Content-Type: application/json
 
 {
   "userId": "696a511aea4207025673111d",
-  "roomId": "696d2ffb19af9c89e0939b23",
-  "checkInDate": "2026-06-01",
-  "checkOutDate": "2026-06-05"
+  "roomId": "696d308919af9c89e0939b38",
+  "checkInDate": "2026-06-15",
+  "checkOutDate": "2026-06-17"
 }
 
 ### GET request to read all Bookings
