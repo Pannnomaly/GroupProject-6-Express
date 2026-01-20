@@ -17,6 +17,11 @@ const bookingSchema = new mongoose.Schema(
     checkInDate: { type: Date, required: true },
     checkOutDate: { type: Date, required: true },
     nights: { type: Number, required: true },
+    firstname: { type: String, required: true },
+    lastname: { type: String, required: true },
+    email: { type: String, required: true },
+    phone: { type: String, required: true },
+    specialRequest: { type: String },
     pricing: {
         roomRate: { type: Number, required: true },
         totalAmount: { type: Number, required: true }
