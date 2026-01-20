@@ -73,7 +73,7 @@ export const getBooking = async (req, res, next) => {
 
 export const getMyBookings = async (req, res, next) => {
   try {
-    const bookings = await Booking.findOne()
+    const bookings = await Booking.find()
       .populate({
         path: "userId",
         select: "firstname lastname email role"
@@ -89,7 +89,6 @@ export const getMyBookings = async (req, res, next) => {
       data: bookings
     });
   } catch (error) {
-    console.log("test api");
     next(error);
   }
 };
