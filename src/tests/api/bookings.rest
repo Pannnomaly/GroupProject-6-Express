@@ -5,8 +5,12 @@ Content-Type: application/json
 {
   "userId": "696a511aea4207025673111d",
   "roomId": "696d2ffb19af9c89e0939b23",
-  "checkInDate": "2026-06-01",
-  "checkOutDate": "2026-06-05"
+  "checkInDate": "2025-11-20",
+  "checkOutDate": "2025-11-30",
+  "firstname": "Bogo",
+  "lastname": "BOZO",
+  "email": "bobo@Geemail.coom",
+  "phone": "0969696969"
 }
 
 ### GET request to read all Bookings
@@ -19,7 +23,7 @@ GET http://localhost:3000/api/v1/bookings/BK-154487
 DELETE http://localhost:3000/api/v1/bookings/BK-982768
 
 ### PATCH update a user
-PATCH http://localhost:3000/api/v1/bookings/BK-586407
+PATCH http://localhost:3000/api/v1/bookings/BK-286383
 Content-Type: application/json
 
 {
