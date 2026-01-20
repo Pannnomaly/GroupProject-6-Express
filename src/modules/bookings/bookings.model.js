@@ -84,7 +84,7 @@ bookingSchema.post("save", async function (doc) {
     // หาความสัมพันธ์ของสถานะ (ใช้ Object ที่คุณประกาศไว้ข้างบน)
     const matchStatus = BOOKING_TO_ROOM_STATUS[doc.status] || "Available";
 
-    // ไอดี guest
+    // ประกาศตัวแปร guestData ไว้เก็บ _id
     let guestData;
 
     if (doc.status === "checked_out" || doc.status === "cancelled") {
