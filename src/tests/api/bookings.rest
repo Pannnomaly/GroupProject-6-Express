@@ -31,4 +31,9 @@ Content-Type: application/json
 }
 
 ### GET user booking
-POST http://localhost:3000/api/v1/bookings/my-bookings
+GET http://localhost:3000/api/v1/bookings/my-bookings
+Content-Type: application/json
+
+{
+  "userId": "696f9067000a2c94d190cf3f"
+}

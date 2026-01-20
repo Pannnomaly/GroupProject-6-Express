@@ -72,7 +72,7 @@ export const getBooking = async (req, res, next) => {
 };
 
 export const getMyBookings = async (req, res, next) => {
-  const userId = req.user._id;
+  const { userId } = req.body;
   try {
     const bookings = await Booking.find({ userId: userId }).sort({ createdAt: -1 });
 
@@ -84,7 +84,6 @@ export const getMyBookings = async (req, res, next) => {
     next(error);
   }
 };
-
 
 export const deleteBooking = async (req, res, next) => {
   const { CNumber } = req.params;
