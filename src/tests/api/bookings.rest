@@ -4,9 +4,9 @@ Content-Type: application/json
 
 {
   "userId": "696a511aea4207025673111d",
-  "roomId": "696d2ffb19af9c89e0939b23",
-  "checkInDate": "2025-11-20",
-  "checkOutDate": "2025-11-30",
+  "roomId": "696d301919af9c89e0939b29",
+  "checkInDate": "2025-11-13",
+  "checkOutDate": "2025-11-15",
   "firstname": "Bogo",
   "lastname": "BOZO",
   "email": "bobo@Geemail.coom",
@@ -23,12 +23,17 @@ GET http://localhost:3000/api/v1/bookings/BK-750444
 DELETE http://localhost:3000/api/v1/bookings/BK-982768
 
 ### PATCH update a user
-PATCH http://localhost:3000/api/v1/bookings/BK-286383
+PATCH http://localhost:3000/api/v1/bookings/BK-035131
 Content-Type: application/json
 
 {
-  "status": "confirmed"
+  "status": "checked_out"
 }
 
 ### GET user booking
 GET http://localhost:3000/api/v1/bookings/my-bookings
+Content-Type: application/json
+
+{
+  "userId": "696f9067000a2c94d190cf3f"
+}

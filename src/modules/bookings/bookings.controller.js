@@ -72,17 +72,9 @@ export const getBooking = async (req, res, next) => {
 };
 
 export const getMyBookings = async (req, res, next) => {
+  const { userId } = req.body;
   try {
-    const bookings = await Booking.find()
-      .populate({
-        path: "userId",
-        select: "firstname lastname email role"
-      })
-      .populate({
-        path: "roomId",
-        select: "roomNumber type floor roomRate status"
-      })
-      .sort({ createdAt: -1 });
+    const bookings = await Booking.find({ userId: userId }).sort({ createdAt: -1 });
 
     res.status(200).json({
       success: true,
