@@ -71,6 +71,29 @@ export const getBooking = async (req, res, next) => {
     }
 };
 
+export const getMyBookings = async (req, res, next) => {
+  try {
+    const bookings = await Booking.find()
+      .populate({
+        path: "userId",
+        select: "firstname lastname email role"
+      })
+      .populate({
+        path: "roomId",
+        select: "roomNumber type floor roomRate status"
+      })
+      .sort({ createdAt: -1 });
+
+    res.status(200).json({
+      success: true,
+      data: bookings
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+
 export const deleteBooking = async (req, res, next) => {
   const { CNumber } = req.params;
 

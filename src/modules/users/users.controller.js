@@ -174,7 +174,7 @@ export const loginUser = async (req, res, next) => {
         lastname: user.lastname,
         imagelink: user.imagelink,
         detail: user.detail,
-        // email: user.email,
+        email: user.email,
         role: user.role,
       },
     });
@@ -219,7 +219,7 @@ export const stayLoggedIn = async (req, res, next) => {
         lastname: user.lastname,
         imagelink: user.imagelink,
         detail: user.detail,
-        // email: user.email,
+        email: user.email,
         role: user.role,
       },
     });
