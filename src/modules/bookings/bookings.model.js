@@ -81,17 +81,50 @@ bookingSchema.post("save", async function (doc) {
     // ดึง Model Room มาใช้งาน
     const Room = mongoose.model("Room");
 
+    // หาความสัมพันธ์ของสถานะ (ใช้ Object ที่คุณประกาศไว้ข้างบน)
     const matchStatus = BOOKING_TO_ROOM_STATUS[doc.status] || "Available";
 
+    // ไอดี guest
+    let guestData;
+
+    if (doc.status === "checked_out" || doc.status === "cancelled") {
+      // ถ้าเช็คเอาท์ หรือ ยกเลิก ให้ล้างชื่อแขกออกทันที
+      guestData = null;
+    } else {
+      // ถ้าเป็น pending, confirmed หรือ checked_in ให้ใส่ userId ไว้เลย
+      // เพื่อให้ Admin ดูได้ว่าใครเป็นเจ้าของดีลนี้/ใครพักอยู่
+      guestData = doc.userId;
+    }
+
+    // อัปเดตข้อมูลไปยัง Room
     await Room.findByIdAndUpdate(doc.roomId, {
       status: matchStatus,
-      // ถ้าสถานะเป็น Available ให้ล้างชื่อแขกออก (null)
-      currentGuest: matchStatus === "Available" ? null : doc.userId
+      currentGuest: guestData
     });
 
-    console.log(`Updated Room ${doc.roomId} status to: ${matchStatus}`);
+    console.log(`[Room Update] ID: ${doc.roomId} | Status: ${matchStatus} | Guest: ${guestData}`);
   } catch (err) {
     console.error("Error in bookingSchema.post('save'):", err);
+  }
+});
+
+// Post-DeleteBooking: อัพเดทสถานะ Room เมื่อ ลบ booking
+bookingSchema.post("findOneAndDelete", async function (doc) {
+  // doc คือข้อมูลการจองที่เพิ่งถูกลบไป
+  if (doc) {
+    try {
+      const Room = mongoose.model("Room");
+
+      // อัปเดตสถานะห้องกลับเป็น Available และล้างชื่อแขกออก
+      await Room.findByIdAndUpdate(doc.roomId, {
+        status: "Available",
+        currentGuest: null
+      });
+
+      console.log(`Booking Deleted: Room ID ${doc.roomId} is now Available.`);
+    } catch (error) {
+      console.error("Error updating room status after delete:", error);
+    }
   }
 });
 
