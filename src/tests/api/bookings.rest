@@ -13,15 +13,18 @@ Content-Type: application/json
 GET http://localhost:3000/api/v1/bookings
 
 ### GET request to read a specific booking
-GET http://localhost:3000/api/v1/bookings/BK-154487
+GET http://localhost:3000/api/v1/bookings/BK-750444
 
 ### DELETE request to delete a user
 DELETE http://localhost:3000/api/v1/bookings/BK-623170
 
 ### PATCH update a user
-PATCH http://localhost:3000/api/v1/bookings/BK-079981
+PATCH http://localhost:3000/api/v1/bookings/BK-750444
 Content-Type: application/json
 
 {
   "status": "confirmed"
 }
+
+### GET user booking
+GET http://localhost:3000/api/v1/bookings/my-bookings
