@@ -72,9 +72,12 @@ export const getBooking = async (req, res, next) => {
 };
 
 export const getMyBookings = async (req, res, next) => {
-  const { userId } = req.body;
+  const userId = req.user._id;
   try {
-    const bookings = await Booking.find({ userId: userId }).sort({ createdAt: -1 });
+    const bookings = await Booking.find({ userId: userId }).populate({
+        path: "roomId",
+        select: "roomNumber type floor roomRate status imagelink"
+      }).sort({ createdAt: -1 });
 
     res.status(200).json({
       success: true,
