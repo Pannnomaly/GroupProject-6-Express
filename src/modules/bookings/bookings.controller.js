@@ -103,11 +103,13 @@ export const deleteBooking = async (req, res, next) => {
 
     if (!deleted) {
       const error = new Error("A booking not found!");
+      error.status = 404;
       return next(error);
     }
 
     return res.status(200).json({
       success: true,
+      message: "Deleted successfully and update room status to Available",
       data: null,
     });
   } catch (error) {
@@ -122,7 +124,7 @@ export const updateBooking = async (req, res, next) => {
 
   try {
 
-    // 1. ค้นหาเอกสารการจองเดิม (ยังไม่ต้องอัปเดต)
+    // ค้นหาเอกสารการจองเดิม (ยังไม่ต้องอัปเดต)
     const booking = await Booking.findOne({ confirmationNumber: CNumber });
 
     if (!booking) {
@@ -131,11 +133,10 @@ export const updateBooking = async (req, res, next) => {
       return next(error);
     }
 
-    // 2. นำข้อมูลจาก body เข้าไปทับใน booking object
-    // วิธีนี้จะทำให้ค่าที่ส่งมาเปลี่ยนไป ส่วนค่าที่ไม่ส่งมาจะยังคงเดิม
+    // นำข้อมูลจาก body เข้าไปทับใน booking object
     Object.assign(booking, body);
 
-    // 3. เรียกใช้ .save()
+    // เรียกใช้ .save()
     // ขั้นตอนนี้จะกระตุ้น pre("validate") เพื่อคำนวณราคาใหม่
     // และกระตุ้น post("save") เพื่อเปลี่ยนสถานะห้องพักในตาราง Room
     const updated = await booking.save();

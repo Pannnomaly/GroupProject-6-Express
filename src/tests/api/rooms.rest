@@ -21,13 +21,8 @@ PATCH http://localhost:3000/api/v1/rooms/101
 Content-Type: application/json
 
 {
-    "roomNumber": 101,
-    "type": "Single",
-    "floor": 1,
-    "roomRate": 1200,
     "status": "Available",
-    "currentGuest": null,
-    "imagelink": "#"
+    "currentGuest": null
 }
 
 ### DELETE request to delete a room
