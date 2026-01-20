@@ -72,8 +72,10 @@ export const getBooking = async (req, res, next) => {
 };
 
 export const getMyBookings = async (req, res, next) => {
+
   try {
-    const bookings = await Booking.find()
+    const { userId } = req.body;
+    const bookings = await Booking.find(userId)
       .populate({
         path: "userId",
         select: "firstname lastname email role"

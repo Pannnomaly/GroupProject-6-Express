@@ -30,8 +30,8 @@ POST http://localhost:3000/api/v1/users/auth/cookie/login
 Content-Type: application/json
 
 {
-    "email": "pann@hotmail.com",
-    "password": "pann1234"
+    "email": "sura@hotmail.com",
+    "password": "sura1234"
 }
 
 ### POST Logout a user
