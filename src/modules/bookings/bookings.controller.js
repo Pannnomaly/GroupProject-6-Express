@@ -57,7 +57,9 @@ export const createBooking = async (req, res, next) => {
 
 export const getBookings = async (req, res, next) => {
   try {
-    const bookings = await Booking.find();
+    const bookings = await Booking.find()
+    .populate("roomId")
+    .sort({ createdAt: -1 });;
 
     return res.status(200).json({
       success: true,
@@ -123,6 +125,7 @@ export const getMyBookings = async (req, res, next) => {
 export const deleteBooking = async (req, res, next) => {
   const { CNumber } = req.params;
   const userId = req.user._id;
+  const userRole = req.user.role;
 
   try {
     const deleted = await Booking.findOne({ confirmationNumber: CNumber });
@@ -133,8 +136,8 @@ export const deleteBooking = async (req, res, next) => {
       return next(error);
     }
 
-    if (deleted.userId.toString() !== userId.toString()) {
-      return res.status(403).json({ message: "Forbidden" });
+    if (deleted.userId.toString() !== userId.toString() && userRole !== 'admin') {
+      return res.status(403).json({ message: "Forbidden: You don't have permission to delete this booking" });
     }
 
     await Booking.findOneAndDelete({ confirmationNumber: CNumber });
