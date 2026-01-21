@@ -150,9 +150,11 @@ export const loginUser = async (req, res, next) => {
       });
     }
 
-    const token = jwt.sign({ userId: user._id, role: user.role }, process.env.JWT_SECRET, {
-      expiresIn: "1h",
-    });
+    const token = jwt.sign(
+      { userId: user._id, role: user.role },
+      process.env.JWT_SECRET,
+      { expiresIn: "1h" }
+    );
 
     const isProd = process.env.NODE_ENV === "production";
 

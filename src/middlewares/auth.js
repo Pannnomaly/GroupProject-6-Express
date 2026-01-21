@@ -18,7 +18,7 @@ export const authUser = (req, res, next) => {
 
         req.user = {
             _id: decededToken.userId,
-            // userRole: decededToken.role,
+            role: decededToken.role,
         };
 
         next();
