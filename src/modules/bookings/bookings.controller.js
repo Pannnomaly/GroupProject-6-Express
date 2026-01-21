@@ -1,4 +1,6 @@
 import { Booking } from "./bookings.model.js";
+import { Room } from "../rooms/rooms.model.js";
+import { User } from "../users/users.model.js";
 
 export const createBooking = async (req, res, next) => {
   try {
