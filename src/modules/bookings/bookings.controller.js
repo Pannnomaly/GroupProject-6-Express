@@ -103,9 +103,10 @@ export const getMyBookings = async (req, res, next) => {
 
 export const deleteBooking = async (req, res, next) => {
   const { CNumber } = req.params;
+  const userId = req.user._id;
 
   try {
-    const deleted = await Booking.findOneAndDelete({ confirmationNumber: CNumber });
+    const deleted = await Booking.findOne({ confirmationNumber: CNumber });
 
     if (!deleted) {
       const error = new Error("A booking not found!");
@@ -113,10 +114,16 @@ export const deleteBooking = async (req, res, next) => {
       return next(error);
     }
 
+    if (deleted.userId.toString() !== userId.toString()) {
+      return res.status(403).json({ message: "Forbidden" });
+    }
+
+    await Booking.findOneAndDelete({ confirmationNumber: CNumber });
+
     return res.status(200).json({
       success: true,
       message: "Deleted successfully and update room status to Available",
-      data: null,
+      // data: null,
     });
   } catch (error) {
     return next(error);

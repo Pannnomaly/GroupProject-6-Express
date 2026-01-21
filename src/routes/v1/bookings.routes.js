@@ -9,5 +9,5 @@ router.get("/my-bookings", authUser, getMyBookings);
 router.post("/", createBooking);
 router.get("/", getBookings);
 router.get("/:CNumber", getBooking);
-router.delete("/:CNumber", deleteBooking);
+router.delete("/:CNumber", authUser, deleteBooking);
 router.patch("/:CNumber", updateBooking);
