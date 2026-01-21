@@ -17,12 +17,11 @@ GET http://localhost:3000/api/v1/rooms/
 GET http://localhost:3000/api/v1/rooms/101
 
 ### PATCH update a user
-PATCH http://localhost:3000/api/v1/rooms/203
+PATCH http://localhost:3000/api/v1/rooms/303
 Content-Type: application/json
 
 {
-    "status": "Available",
-    "currentGuest": null
+    "size": "19 m²"
 }
 
 ### DELETE request to delete a room
