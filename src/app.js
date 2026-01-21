@@ -29,6 +29,10 @@ app.use(express.json());
 
 app.use(cookieParser());
 
+app.get("/", (req, res) => {
+    res.send("Hello, MonkeyDB OIIA!");
+});
+
 app.use("/api", apiRoutes);
 
 app.use((req, res, next) => {
