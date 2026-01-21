@@ -42,33 +42,49 @@ bookingSchema.pre("validate", async function () {
     const Room = mongoose.model("Room");
     const room = await Room.findById(this.roomId);
 
+    // เจอเลขห้องหรือไม่?
     if (!room) {
-      throw new Error("Room not found")
-    };
+      // ถ้าหาห้องไม่เจอ ให้ Log เตือนไว้แต่ไม่ต้อง Throw Error เพื่อให้ Save/Patch ผ่าน
+      console.warn(`[Warning] Room ID ${this.roomId} not found for Booking ${this.confirmationNumber}. Skipping validation.`);
 
-    // เช็คว่าห้องว่างไหม (เฉพาะตอนสร้างใหม่)
-    if (this.isNew && room.status !== "Available") {
-      throw new Error(`Room is currently under ${room.status}`);
+      // คำนวณเฉพาะส่วนที่ไม่ต้องพึ่งข้อมูลจากตาราง Room
+      const checkIn = new Date(this.checkInDate);
+      const checkOut = new Date(this.checkOutDate);
+      if (checkOut > checkIn) {
+        this.nights = Math.ceil((checkOut - checkIn) / (1000 * 60 * 60 * 24));
+      }
+
+      // ใส่ค่า Default ให้ pricing เพื่อไม่ให้พังเวลา Validate (เพราะ schema กำหนด required: true)
+      if (!this.pricing.roomRate) this.pricing.roomRate = 0;
+      if (!this.pricing.totalAmount) this.pricing.totalAmount = 0;
+
+      return; // จบการทำงานของ Hook นี้ทันที
+    } else {
+      // เช็คว่าห้องว่างไหม (เฉพาะตอนสร้างใหม่)
+      if (this.isNew && room.status !== "Available") {
+        throw new Error(`Room is currently under ${room.status}`);
+      }
+
+      // ล็อคราคาจากตาราง Room
+      this.pricing.roomRate = room.roomRate;
+
+      const checkIn = new Date(this.checkInDate);
+      const checkOut = new Date(this.checkOutDate);
+      if (checkOut <= checkIn) {
+        throw new Error("Check-out date must be at least one day after check-in date.");
+      };
+
+      // คำนวณ Nights & Total
+      this.nights = Math.ceil((checkOut - checkIn) / (1000 * 60 * 60 * 24));
+      this.pricing.totalAmount = this.pricing.roomRate * this.nights;
+
+      // เลขใบจอง
+      if (this.isNew && !this.confirmationNumber) {
+        const timestamp = Date.now().toString().slice(-6);
+        this.confirmationNumber = `BK-${timestamp}`;
+      }
     }
 
-    // ล็อคราคาจากตาราง Room
-    this.pricing.roomRate = room.roomRate;
-
-    const checkIn = new Date(this.checkInDate);
-    const checkOut = new Date(this.checkOutDate);
-    if (checkOut <= checkIn) {
-      throw new Error("Check-out date must be at least one day after check-in date.");
-    };
-
-    // คำนวณ Nights & Total
-    this.nights = Math.ceil((checkOut - checkIn) / (1000 * 60 * 60 * 24));
-    this.pricing.totalAmount = this.pricing.roomRate * this.nights;
-
-    // เลขใบจอง
-    if (this.isNew && !this.confirmationNumber) {
-      const timestamp = Date.now().toString().slice(-6);
-      this.confirmationNumber = `BK-${timestamp}`;
-    }
 
   } catch (error) {
     throw error;

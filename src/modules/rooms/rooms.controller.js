@@ -1,9 +1,19 @@
 import { Room } from "./rooms.model.js";
 
 export const createRoom = async (req, res, next) => {
-  const {roomNumber, type, floor, roomRate, imagelink} = req.body;
+  const {
+    roomNumber,
+    type,
+    floor,
+    roomRate,
+    imagelink,
+    size,
+    additional1,
+    additional2,
+    additional3,
+  } = req.body;
 
-  if (!roomNumber || !type || !floor || !roomRate || !imagelink)
+  if (!roomNumber || !type || !floor || !roomRate || !imagelink || !size)
     {
       const error = new Error("Your inputs are not met with the requirements");
       error.status = 400;
@@ -12,7 +22,16 @@ export const createRoom = async (req, res, next) => {
 
   try {
 
-    const doc = await Room.create({roomNumber, type, floor, roomRate, imagelink});
+    const doc = await Room.create({
+      roomNumber,
+      type,
+      floor,
+      roomRate,
+      imagelink,
+      size,
+      additional1,
+      additional2,
+      additional3});
 
     return res.status(201).json({
       success: true,
@@ -22,7 +41,7 @@ export const createRoom = async (req, res, next) => {
   } catch (error) {
       if (error.code === 11000)
       {
-        const conflictError = new Error("Room number already in use"); // สร้าง Error ใหม่แทนการแก้ตัวเดิม
+        const conflictError = new Error("Room number already created"); // สร้าง Error ใหม่แทนการแก้ตัวเดิม
         conflictError.status = 409;
         return next(conflictError);
       }

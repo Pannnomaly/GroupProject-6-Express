@@ -23,11 +23,11 @@ GET http://localhost:3000/api/v1/bookings/BK-750444
 DELETE http://localhost:3000/api/v1/bookings/BK-982768
 
 ### PATCH update a user
-PATCH http://localhost:3000/api/v1/bookings/BK-035131
+PATCH http://localhost:3000/api/v1/bookings/BK-675378
 Content-Type: application/json
 
 {
-  "status": "checked_out"
+  "status": "cancelled"
 }
 
 ### GET user booking
