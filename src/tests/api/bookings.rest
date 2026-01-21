@@ -3,8 +3,8 @@ POST http://localhost:3000/api/v1/bookings
 Content-Type: application/json
 
 {
-  "userId": "696a511aea4207025673111d",
-  "roomId": "696d301919af9c89e0939b29",
+  "userId": "696fbc3a4833b6985ab42f09",
+  "roomId": "696d306f19af9c89e0939b36",
   "checkInDate": "2025-11-13",
   "checkOutDate": "2025-11-15",
   "firstname": "Bogo",
@@ -17,12 +17,12 @@ Content-Type: application/json
 GET http://localhost:3000/api/v1/bookings
 
 ### GET request to read a specific booking
-GET http://localhost:3000/api/v1/bookings/BK-750444
+GET http://localhost:3000/api/v1/bookings/BK-286383
 
-### DELETE request to delete a user
+### DELETE request to delete a booking
 DELETE http://localhost:3000/api/v1/bookings/BK-982768
 
-### PATCH update a user
+### PATCH update a booking
 PATCH http://localhost:3000/api/v1/bookings/BK-675378
 Content-Type: application/json
 
