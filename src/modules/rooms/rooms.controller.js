@@ -54,7 +54,7 @@ export const createRoom = async (req, res, next) => {
 
 export const getRooms = async (req, res, next) => {
   try {
-    const rooms = await Room.find().sort({ roomNumber: 1 });
+    const rooms = await Room.find().populate('currentGuest', 'firstname lastname').sort({ roomNumber: 1 });
 
     return res.status(200).json({
       success: true,
