@@ -1,0 +1,29 @@
+### POST request to create a new rooms
+POST http://localhost:3000/api/v1/rooms/
+Content-Type: application/json
+
+{
+    "roomNumber": 103,
+    "type": "Suite",
+    "floor": 1,
+    "roomRate": 3500,
+    "imagelink": "#"
+}
+
+### GET request to read all rooms
+GET http://localhost:3000/api/v1/rooms/
+
+### GET request to read a room
+GET http://localhost:3000/api/v1/rooms/101
+
+### PATCH update a user
+PATCH http://localhost:3000/api/v1/rooms/303
+Content-Type: application/json
+
+{
+    "size": "19 m²"
+}
+
+### DELETE request to delete a room
+DELETE http://localhost:3000/api/v1/rooms/17
+

@@ -14,17 +14,15 @@ export const authUser = (req, res, next) => {
     }
 
     try {
-        
         const decededToken = jwt.verify(token, process.env.JWT_SECRET);
 
         req.user = {
             _id: decededToken.userId,
-            // userRole: decededToken.role,
+            role: decededToken.role,
         };
 
         next();
     } catch (error) {
-        
         next(error);
     }
 };

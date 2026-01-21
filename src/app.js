@@ -3,11 +3,10 @@ import cookieParser from "cookie-parser";
 import helmet from "helmet";
 import cors from "cors";
 import { router as apiRoutes } from "./routes/index.js";
-import { centralizedError as errorHandling } from "./middlewares/errorHandling.js";
+import { centralizedError, notFoundError } from "./middlewares/errorHandling.js";
+import { limiter } from "./middlewares/rateLimiter.js";
 
 export const app = express();
-
-app.use(express.json());
 
 app.set("trust proxy", 1);
 
@@ -18,15 +17,20 @@ const corsOptions = {
         "http://localhost:5173",
             "http://localhost:5174",
                 "http://localhost:5175",
-                    "https://frontend-react-app-ecru.vercel.app",     
+                    "https://group-project-6-react.vercel.app",  
     ],
     credentials: true,
 };
 
 app.use(cors(corsOptions));
 
+app.use(limiter);
+
+app.use(express.json());
+
 app.use(cookieParser());
 
 app.use("/api", apiRoutes);
 
-app.use(errorHandling);
+app.use(notFoundError);
+app.use(centralizedError);

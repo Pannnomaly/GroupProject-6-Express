@@ -1,0 +1,16 @@
+### GET request to read all users
+GET http://localhost:3000/api/v1/contacts/
+
+### POST request to create a new users
+POST http://localhost:3000/api/v1/contacts/
+Content-Type: application/json
+
+{
+    "name": "Pannnomaly",
+    "email": "pann@example.com",
+    "subject": "Blackout",
+    "message": "My room was Blackout last day! Please fixs it ASAP!"
+}
+
+### DELETE request to delete a user
+DELETE http://localhost:3000/api/v1/contacts/696bd2e28223e2ac714f2efb
