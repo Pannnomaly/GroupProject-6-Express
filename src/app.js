@@ -3,7 +3,6 @@ import cookieParser from "cookie-parser";
 import helmet from "helmet";
 import cors from "cors";
 import { router as apiRoutes } from "./routes/index.js";
-import { centralizedError, notFoundError } from "./middlewares/errorHandling.js";
 import { limiter } from "./middlewares/rateLimiter.js";
 
 export const app = express();
@@ -32,5 +31,22 @@ app.use(cookieParser());
 
 app.use("/api", apiRoutes);
 
-app.use(notFoundError);
-app.use(centralizedError);
+app.use((req, res, next) => {
+    const error = new Error(`Not found: ${req.method} ${req.originalUrl}`);
+
+    error.name = error.name || "NotFoundError";
+    error.status = error.status || 404;
+
+    next(error);
+});
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(err.status || 500).json({
+        success: false,
+        message: err.message || "Internal Server Error",
+        path: req.originalUrl,
+        method: req.method,
+        timestamp: new Date().toISOString(),
+        stack: err.stack,
+    });
+});
