@@ -73,15 +73,28 @@ export const getBooking = async (req, res, next) => {
 
 export const getMyBookings = async (req, res, next) => {
   const userId = req.user._id;
+
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 3;
+  const skip = (page - 1) * limit;
   try {
+
+    const total = await Booking.countDocuments({ userId });
+
     const bookings = await Booking.find({ userId: userId }).populate({
         path: "roomId",
         select: "roomNumber type floor roomRate status imagelink"
-      }).sort({ createdAt: -1 });
+      }).sort({ createdAt: -1 }).skip(skip).limit(limit);
 
     res.status(200).json({
       success: true,
-      data: bookings
+      data: bookings,
+      pagination: {
+        totalItems: total,
+        currentPage: page,
+        totalPages: Math.ceil(total / limit),
+        limit
+      }
     });
   } catch (error) {
     next(error);
