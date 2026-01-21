@@ -14,6 +14,23 @@ export const createBooking = async (req, res, next) => {
       specialRequest
     } = req.body;
 
+    // กันห้องผี
+    const roomExists = await Room.exists({ _id: roomId });
+    if (!roomExists) {
+      const error = new Error("Cannot create booking: Room ID not found.");
+      error.status = 404;
+      return next(error);
+    }
+
+    // กันผีสร้าง
+    const userExists = await User.exists({ _id: userId });
+    if (!userExists) {
+      const error = new Error("Cannot create booking: User ID not found.");
+      error.status = 404;
+      return next(error);
+    }
+
+    // สร้าง new booking
     const savedBooking = await Booking.create({
       userId,
       roomId,
