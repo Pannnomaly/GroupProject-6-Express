@@ -33,7 +33,7 @@ const bookingSchema = new mongoose.Schema(
     }
 }, { timestamps: true });
 
-// Pre-Validate: จัดการเรื่องวันที่ ราคา และเลขใบจอง
+// Pre-Validate: จัดการเรื่องข้อมูลที่ดึงและรับมาให้อยู่ในรูปแบบที่ schema เช็คผ่านได้
 bookingSchema.pre("validate", async function () {
   if (!this.checkInDate || !this.checkOutDate || !this.roomId) return;
 
@@ -42,7 +42,7 @@ bookingSchema.pre("validate", async function () {
     const Room = mongoose.model("Room");
     const room = await Room.findById(this.roomId);
 
-    // เจอเลขห้องหรือไม่?
+    // เจอเลขห้องหรือไม่? กรณีห้องโดนลบไปแล้วแต่เคยจองมาก่อน แล้วมาหาทีหลัง
     if (!room) {
       // ถ้าหาห้องไม่เจอ ให้ Log เตือนไว้แต่ไม่ต้อง Throw Error เพื่อให้ Save/Patch ผ่าน
       console.warn(`[Warning] Room ID ${this.roomId} not found for Booking ${this.confirmationNumber}. Skipping validation.`);
@@ -91,7 +91,8 @@ bookingSchema.pre("validate", async function () {
   }
 });
 
-// Post-Save: อัปเดตสถานะห้องให้สัมพันธ์กัน
+// Post-Save: ทำการ  match status ให้เข้ากัน
+// ทำงานก่อนเซฟลง database ด้วยคำสั่ง create() or save()
 bookingSchema.post("save", async function (doc) {
   try {
     // ดึง Model Room มาใช้งาน
